@@ -432,14 +432,16 @@ def _leads_csv(s):
     writer = csv.writer(buf)
 
     writer.writerow([
-        "Date",
-        "Intern",
-        "Company",
-        "Owner",
-        "Contact",
-        "Source",
-        "Status",
-        "Notes"
+        db.fmt_ts(l["ts"]),
+        user["name"],
+        l["company"],
+        l["owner"],
+        l.get("email", ""),
+        l.get("phone", ""),
+        l.get("linkedin", ""),
+        l["platform"],
+        l["status"],
+        l["notes"]
     ])
 
     store = db.load_store()

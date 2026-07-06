@@ -454,14 +454,16 @@ def _leads_csv(s):
         for l in s["interns"][uid]["leads"]:
 
             writer.writerow([
-                db.fmt_ts(l["ts"]),
-                user["name"],
-                l["company"],
-                l["owner"],
-                l["contact"],
-                l["platform"],
-                l["status"],
-                l["notes"]
+                "Date",
+                "Intern",
+                "Company",
+                "Owner",
+                "Email",
+                "Phone",
+                "LinkedIn",
+                "Source",
+                "Status",
+                "Notes"
             ])
 
     return buf.getvalue()

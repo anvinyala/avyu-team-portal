@@ -431,17 +431,18 @@ def _leads_csv(s):
     buf = io.StringIO()
     writer = csv.writer(buf)
 
+    # CSV Header
     writer.writerow([
-        db.fmt_ts(l["ts"]),
-        user["name"],
-        l["company"],
-        l["owner"],
-        l.get("email", ""),
-        l.get("phone", ""),
-        l.get("linkedin", ""),
-        l["platform"],
-        l["status"],
-        l["notes"]
+        "Date",
+        "Intern",
+        "Company",
+        "Owner",
+        "Email",
+        "Phone",
+        "LinkedIn",
+        "Source",
+        "Status",
+        "Notes"
     ])
 
     store = db.load_store()
@@ -451,19 +452,24 @@ def _leads_csv(s):
         if user["role"] != "intern":
             continue
 
-        for l in s["interns"][uid]["leads"]:
+        rec = s["interns"].get(uid)
+
+        if not rec:
+            continue
+
+        for l in rec["leads"]:
 
             writer.writerow([
-                "Date",
-                "Intern",
-                "Company",
-                "Owner",
-                "Email",
-                "Phone",
-                "LinkedIn",
-                "Source",
-                "Status",
-                "Notes"
+                db.fmt_ts(l["ts"]),
+                user["name"],
+                l["company"],
+                l["owner"],
+                l.get("email", ""),
+                l.get("phone", ""),
+                l.get("linkedin", ""),
+                l["platform"],
+                l["status"],
+                l["notes"]
             ])
 
     return buf.getvalue()

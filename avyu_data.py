@@ -17,6 +17,8 @@ import threading
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
+IST = ZoneInfo("Asia/Kolkata")
+
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 DATA_FILE = os.path.join(DATA_DIR, "avyu_store.json")
 _lock = threading.Lock()
@@ -224,15 +226,15 @@ def ms_to_hms(ms):
 
 
 def fmt_ts(ms):
-    return datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
+    return datetime.fromtimestamp(ms / 1000, IST).strftime("%d %b, %I:%M %p")
 
 
 def fmt_clock(ms):
-    return datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
+    return datetime.fromtimestamp(ms / 1000, IST).strftime("%I:%M %p")
 
 def fmt_date_short(ms):
-    return datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
+    return datetime.fromtimestamp(ms / 1000, IST).strftime("%d %b")
 
 
 def now_ms():
-    return int(datetime.now(ZoneInfo("Asia/Kolkata")).timestamp() * 1000)
+    return int(datetime.now(IST).timestamp() * 1000)

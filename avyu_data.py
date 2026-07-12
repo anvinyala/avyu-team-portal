@@ -14,7 +14,8 @@ lose all data. For anything beyond a quick trial, swap `load_store` /
 import json
 import os
 import threading
-from datetime import datetime, timedelta
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 DATA_FILE = os.path.join(DATA_DIR, "avyu_store.json")
@@ -135,7 +136,7 @@ def save_store(store):
 # Daily tasks
 # ---------------------------------------------------------------------------
 def today_key():
-    return datetime.now().strftime("%Y-%m-%d")
+    return datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d")
 
 
 def pretty_date(key):
@@ -158,7 +159,7 @@ def get_today_tasks(record, intern_id):
 def compute_streak(record):
     """Consecutive days with every task checked off. Today doesn't break the streak while it's still in progress."""
     streak = 0
-    cursor = datetime.now()
+    cursor = datetime.now(ZoneInfo("Asia/Kolkata"))
     for i in range(365):
         key = cursor.strftime("%Y-%m-%d")
         day = record["tasks_by_date"].get(key)
@@ -183,7 +184,7 @@ def start_of_week(dt):
 
 def summarize_time(record):
     """Returns (today_ms, week_ms, all_ms), counting a currently-running session live."""
-    now = datetime.now()
+    now = datetime.now(ZoneInfo("Asia/Kolkata"))
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
     week_start = start_of_week(now)
     today_ms = week_ms = all_ms = 0
@@ -191,7 +192,7 @@ def summarize_time(record):
     for s in record["time_sessions"]:
         dur = s["duration_ms"]
         all_ms += dur
-        start_dt = datetime.fromtimestamp(s["start"] / 1000)
+        start_dt = datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
         if start_dt >= today_start:
             today_ms += dur
         if start_dt >= week_start:
@@ -201,7 +202,7 @@ def summarize_time(record):
     if active:
         live_ms = now.timestamp() * 1000 - active["start"]
         all_ms += live_ms
-        start_dt = datetime.fromtimestamp(active["start"] / 1000)
+        start_dt = datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
         if start_dt >= today_start:
             today_ms += live_ms
         if start_dt >= week_start:
@@ -223,16 +224,15 @@ def ms_to_hms(ms):
 
 
 def fmt_ts(ms):
-    return datetime.fromtimestamp(ms / 1000).strftime("%d %b, %I:%M %p")
+    return datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
 
 
 def fmt_clock(ms):
-    return datetime.fromtimestamp(ms / 1000).strftime("%I:%M %p")
-
+    return datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
 
 def fmt_date_short(ms):
-    return datetime.fromtimestamp(ms / 1000).strftime("%d %b")
+    return datetime.fromtimestamp(..., ZoneInfo("Asia/Kolkata"))
 
 
 def now_ms():
-    return int(datetime.now().timestamp() * 1000)
+    return int(datetime.now(ZoneInfo("Asia/Kolkata")).timestamp() * 1000)
